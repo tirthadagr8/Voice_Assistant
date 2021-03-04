@@ -15,7 +15,7 @@ r = sr.Recognizer()
 def recordaudio(ask = False):
     with sr.Microphone() as source:
         if ask:
-            JarvisSpeak(ask)
+            BotSpeak(ask)
         audio = r.listen(source)
         voice_data = ''
         try:
@@ -24,12 +24,12 @@ def recordaudio(ask = False):
             print(voice_data)
         except sr.UnknownValueError:
             if Listen:
-                JarvisSpeak('Sorry, I did not get that.')
+                BotSpeak('Sorry, I did not get that.')
         except sr.RequestError:
-            JarvisSpeak('Sorry, my speech service is down.')
+            BotSpeak('Sorry, my speech service is down.')
         return voice_data
 
-def JarvisSpeak(audio_string):
+def BotSpeak(audio_string):
     tts = gTTS(text=audio_string, lang='en')
     r = random.randint(1, 10000000)
     audio_file = 'audio-' + str(r) + '.mp3'
@@ -40,21 +40,21 @@ def JarvisSpeak(audio_string):
 
 def respond(voice_data):
     if 'what is your name' in voice_data:
-        JarvisSpeak("My name is Jarvis")
+        BotSpeak("My name is Jarvis")
     if 'what time is it' in voice_data:
-        JarvisSpeak(ctime())
+        BotSpeak(ctime())
     if 'search' in voice_data:
         search = recordaudio('What do you want to search for?')
         url = 'https://google.com/search?q=' + search
         webbrowser.get().open(url)
-        JarvisSpeak('Here is what I found for ' + search)
+        BotSpeak('Here is what I found for ' + search)
     if 'find location' in voice_data:
         location = recordaudio('What is the location?')
         url = 'https://google.nl/maps/place/' + location + '/&amp;'
         webbrowser.get().open(url)
-        JarvisSpeak('Here is the location of ' + location)
+        BotSpeak('Here is the location of ' + location)
     if 'open Google' in voice_data:
-        JarvisSpeak('Opening Google Chrome')
+        BotSpeak('Opening Google Chrome')
         os.startfile("C:\Program Files\Google\Chrome\Application\chrome.exe")
     global Listen
     Listen = False
@@ -70,13 +70,13 @@ while 1:
     #print(Listen)
     if 'Siri' in voice_data:
         Listen = True
-        JarvisSpeak('How can i help you?')
+        BotSpeak('How can i help you?')
         continue
     if 'terminate' in voice_data:
-        JarvisSpeak('Terminating')
+        BotSpeak('Terminating')
         exit()
     if 'exit' in voice_data:
         Listen = False
-        JarvisSpeak('i am going to sleep')
+        BotSpeak('i am going to sleep')
     if Listen:
         respond(voice_data)
