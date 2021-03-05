@@ -8,3 +8,5 @@ pip install gTTS
 NOTE: In some cases while installing pyaudio, you may encounter errors. To avoid them, install pipwin and then install pyaudio through pipwin
 pip install pipwin
 pipwin install pyaudio
+
+NOTE: This is a project under DSC-KGEC(Developers Student's Club in KGEC) made by me.
