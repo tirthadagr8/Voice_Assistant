@@ -9,4 +9,4 @@ NOTE: In some cases while installing pyaudio, you may encounter errors. To avoid
 pip install pipwin
 pipwin install pyaudio
 
-NOTE: This is a project under DSC-KGEC(Developers Student's Club in KGEC) made by me.
+NOTE: This is a project for DSC-KGEC(Developers Student's Club in KGEC) made by me.
