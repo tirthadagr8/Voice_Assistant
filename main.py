@@ -85,11 +85,6 @@ def respond(voice_data):
         EndProc(proc)
     global Listen
     Listen = False
-
-
-#time.sleep(1)
-
-#JarvisSpeak('How can i help you?')
 while 1:
     #Listen = False
     time.sleep(0.2)
