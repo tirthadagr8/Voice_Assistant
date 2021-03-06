@@ -60,7 +60,7 @@ def respond(voice_data):
     elif 'what time is it' in voice_data:
         BotSpeak(ctime())
     elif 'search' in voice_data:
-        search = recordaudio('What do you want to search for?')
+        search = voice_data[7:300]
         url = 'https://google.com/search?q=' + search
         webbrowser.get().open(url)
         BotSpeak('Here is what I found for ' + search)
@@ -70,14 +70,14 @@ def respond(voice_data):
         webbrowser.get().open(url)
         BotSpeak('Here is the location of ' + location)
     elif 'open ' in voice_data:
-        app = voice_data[5:100]
+        app = voice_data[5:300]
         BotSpeak('Opening ' + app)
         if ('Google Chrome' in app) or 'Chrome' in app:
             os.startfile("C:\Program Files\Google\Chrome\Application\chrome.exe")
         elif 'discord' in app:
             os.startfile("C:\shortcuts\Discord.exe")
     elif 'close' in voice_data:
-        proc = voice_data[6:100]
+        proc = voice_data[6:300]
         if ('Google Chrome' in proc) or 'Chrome' in proc:
             proc = 'chrome'
         elif 'spotify' in proc:
@@ -85,6 +85,11 @@ def respond(voice_data):
         EndProc(proc)
     global Listen
     Listen = False
+
+
+#time.sleep(1)
+
+#JarvisSpeak('How can i help you?')
 while 1:
     #Listen = False
     time.sleep(0.2)
