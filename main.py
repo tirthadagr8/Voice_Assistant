@@ -5,13 +5,29 @@ import webbrowser
 import os
 import playsound
 import random
+import psutil
+import signal
 from gtts import gTTS
 
 
 Listen = False
 Respond = False
 r = sr.Recognizer()
-
+##############################################
+def EndProc(ProcessName):
+    closed = False
+    for proc in psutil.process_iter():
+        try:
+            procinfo = proc.as_dict(attrs=['pid', 'name', 'create_time'])
+            if ProcessName.lower() in procinfo['name'].lower():
+                os.kill(procinfo['pid'],signal.SIGTERM)
+                closed = True
+        except (psutil.NoSuchProcess, psutil.AccessDenied , psutil.ZombieProcess):
+            BotSpeak('No Such Process Exists sir')
+        #print(closed)
+    if closed:
+        BotSpeak('closed ' + ProcessName)
+###############################################
 def recordaudio(ask = False):
     with sr.Microphone() as source:
         if ask:
@@ -20,42 +36,53 @@ def recordaudio(ask = False):
         voice_data = ''
         try:
             voice_data = r.recognize_google(audio)
-            #JarvisSpeak(voice_data)
-            print(voice_data)
+            #BotSpeak(voice_data)
+            #print(voice_data)
         except sr.UnknownValueError:
             if Listen:
                 BotSpeak('Sorry, I did not get that.')
         except sr.RequestError:
             BotSpeak('Sorry, my speech service is down.')
         return voice_data
-
+#################################################
 def BotSpeak(audio_string):
     tts = gTTS(text=audio_string, lang='en')
     r = random.randint(1, 10000000)
     audio_file = 'audio-' + str(r) + '.mp3'
     tts.save(audio_file)
     playsound.playsound(audio_file)
-    print(audio_string)
+    #print(audio_string)
     os.remove(audio_file)
-
+##################################################
 def respond(voice_data):
     if 'what is your name' in voice_data:
-        BotSpeak("My name is Jarvis")
-    if 'what time is it' in voice_data:
+        BotSpeak("My name is Siri")
+    elif 'what time is it' in voice_data:
         BotSpeak(ctime())
-    if 'search' in voice_data:
+    elif 'search' in voice_data:
         search = recordaudio('What do you want to search for?')
         url = 'https://google.com/search?q=' + search
         webbrowser.get().open(url)
         BotSpeak('Here is what I found for ' + search)
-    if 'find location' in voice_data:
+    elif 'find location' in voice_data:
         location = recordaudio('What is the location?')
         url = 'https://google.nl/maps/place/' + location + '/&amp;'
         webbrowser.get().open(url)
         BotSpeak('Here is the location of ' + location)
-    if 'open Google' in voice_data:
-        BotSpeak('Opening Google Chrome')
-        os.startfile("C:\Program Files\Google\Chrome\Application\chrome.exe")
+    elif 'open ' in voice_data:
+        app = voice_data[5:100]
+        BotSpeak('Opening ' + app)
+        if ('Google Chrome' in app) or 'Chrome' in app:
+            os.startfile("C:\Program Files\Google\Chrome\Application\chrome.exe")
+        elif 'discord' in app:
+            os.startfile("C:\shortcuts\Discord.exe")
+    elif 'close' in voice_data:
+        proc = voice_data[6:100]
+        if ('Google Chrome' in proc) or 'Chrome' in proc:
+            proc = 'chrome'
+        elif 'spotify' in proc:
+            proc = 'spotify'
+        EndProc(proc)
     global Listen
     Listen = False
 
@@ -70,8 +97,9 @@ while 1:
     #print(Listen)
     if 'Siri' in voice_data:
         Listen = True
-        BotSpeak('How can i help you?')
-        continue
+        voice_data = voice_data[5:100]
+        #BotSpeak('How can i help you?')
+        #continue
     if 'terminate' in voice_data:
         BotSpeak('Terminating')
         exit()
@@ -79,4 +107,4 @@ while 1:
         Listen = False
         BotSpeak('i am going to sleep')
     if Listen:
-        respond(voice_data) 
+        respond(voice_data)
