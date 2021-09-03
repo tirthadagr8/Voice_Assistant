@@ -66,7 +66,7 @@ def respond(voice_data):
         BotSpeak('Here is what I found for ' + search)
     elif 'find location' in voice_data:
         location = recordaudio('What is the location?')
-        url = 'https://google.nl/maps/place/' + location + '/&amp;'
+        url = 'https://google.com/maps/place/' + location + '/&amp;'
         webbrowser.get().open(url)
         BotSpeak('Here is the location of ' + location)
     elif 'open ' in voice_data:
